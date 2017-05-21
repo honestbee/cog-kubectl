@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.0.3
+version: 0.0.4
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.0.3
+  tag: 0.0.4
 permissions:
   - kubectl:read
   - kubectl:write
@@ -91,7 +91,7 @@ templates:
   resource_list:
     body: |
       ~each var=$results as=r~
-      ~if cond=$r.Kind == "Pod" ~
+      ~if cond=$r.Kind == Pod ~
       ~attachment color=$r.Color~
       **Pod Namespace:** ~$r.Namespace~
       **Pod Name:** ~$r.Name~
@@ -101,7 +101,7 @@ templates:
       **Pod Timestamp:** ~$r.Timestamp~
       **Pod Node:** ~$r.Node~
       ~end~
-      ~if cond=$r.Kind == "Service" ~
+      ~if cond=$r.Kind == Service ~
       ~attachment color=$r.Color~
       **Service Namespace:** ~$r.Namespace~
       **Service Name:** ~$r.Name~
