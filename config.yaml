@@ -29,11 +29,9 @@ config:
       description: Required Kubernetes API certificate for secure execution
 commands:
   get:
-    description: Enumerate and view existing Hosted Zones
+    description: Display one or many resources.
     executable: /usr/local/bin/cog-command
     documentation: |
-      Display one or many resources.
-
       Valid resource types include:
 
         * clusters (valid only for federation apiservers)

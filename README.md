@@ -37,7 +37,12 @@ You can set these variables with Cog's dynamic config feature:
 echo '"KUBERNETES_TOKEN": <YOUR_TOKEN>' >> config.yaml
 echo '"KUBERNETES_SERVER": <YOUR_API_ENDPOINT>' >> config.yaml
 echo '"KUBERNETES_CERT": <YOUR_CA_CERT_BASE64>' >> config.yaml
-cogctl dynamic-config create kubectl config.yaml --layer=base
+cogctl bundle config create kubectl config.yaml --layer=base
+```
+
+```
+!permission grant r53:read cog-admin
+!kubectl:get po
 ```
 
 # Development
