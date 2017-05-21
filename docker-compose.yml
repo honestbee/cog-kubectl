@@ -1,7 +1,7 @@
 version: '2'
 services:
   command:
-    image: quay.io/honestbee/kubectl:0.0.2
+    image: quay.io/honestbee/kubectl:0.0.3
     command: /usr/local/bin/cog-command
     env_file:
     - ".env"
