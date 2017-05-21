@@ -101,7 +101,7 @@ commands:
         description: The image for the container to run.
       port:
         type: string
-        require: false
+        required: false
         description: The port that this container exposes.  If --expose is true, this is also the port used by the service that is created.
       expose:
         type: bool
