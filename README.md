@@ -41,7 +41,7 @@ cogctl bundle config create kubectl config.yaml --layer=base
 ```
 
 ```
-!permission grant r53:read cog-admin
+!permission grant kubectl:read cog-admin
 !kubectl:get po
 ```
 
