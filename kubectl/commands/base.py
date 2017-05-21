@@ -12,7 +12,7 @@ class KubectlBase(Command):
     self.kubernetes_token = None
     self.kubernetes_server = None
     self.kubernetes_cert = None
-    self._kubectl = subprocess.check_output('which kubectl', shell=True).strip().decode('utf-8')
+    self._kubectl = "/usr/local/bin/kubectl"
 
   def prepare(self):
     self.kubernetes_token = self.config("KUBERNETES_TOKEN")
