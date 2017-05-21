@@ -48,3 +48,44 @@ class KubectlBase(Command):
     commandline.extend(args)
     # self.response.debug(json.dumps(list(map(str, commandline))))
     return commandline
+
+  def _parse(self, data):
+    results = []
+    if data["kind"] == "List":
+        for i in data["items"]:
+            results.append(self._parse_item(i))
+    else:
+        results.append(self._parse_item(data))
+    return results
+
+  def _parse_item(self, item):
+    if item["kind"] == 'Pod':
+      return {
+        "Kind": item["kind"],
+        "Namespace": item["metadata"]["namespace"],
+        "Name": item["metadata"]["name"],
+        "Count": len(item["status"]["containerStatuses"]),
+        "ReadyCount": len([c for c in item["status"]["containerStatuses"] if c["ready"]]),
+        "Restarts" : sum([c["restartCount"] for c in item["status"]["containerStatuses"]]),
+        "Status": item["status"]["phase"],
+        "Color": {
+            "Pending": "yellow",
+            "Failed": "red",
+            "Succeeded": "green",
+            "Running": "green",
+        }.get(item["status"]["phase"],"gray"),
+        "Node": item["spec"]["nodeName"],
+        "Timestamp": item["metadata"]["creationTimestamp"]
+      }
+    elif item["kind"] == 'Service':
+      return {
+        "Kind": item["kind"],
+        "Namespace": item["metadata"]["namespace"],
+        "Name": item["metadata"]["name"]
+      }
+    elif item["kind"] == 'Deployment':
+      return {
+        "Kind": item["kind"],
+        "Namespace": item["metadata"]["namespace"],
+        "Name": item["metadata"]["name"]
+      }
