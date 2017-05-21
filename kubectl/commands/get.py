@@ -12,13 +12,18 @@ class Get(KubectlBase):
     resource_type = self.request.args[0]
     # resource_types = resource_type.split(",")
 
-    args = self._get_args()
-    result = self.call_json('get',resource_type, *args)
+    opts=[]
+    try:
+        opts = self._get_opts()
+    except:
+        pass
+
+    result = self.call_json('get',resource_type, *opts)
 
     parsed_results=self._parse(result)
     self.response.content(parsed_results, template="resource_list").send()
 
-  def _get_args(self):
+  def _get_opts(self):
     args=[]
     if self.request.get_optional_option('ALL-NAMESPACES') == "true":
       args.append("--all-namespaces")
