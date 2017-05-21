@@ -11,7 +11,7 @@ long_description: >
 version: 0.0.1
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.0.1
+  tag: 0.0.2
 permissions:
   - kubectl:read
   - kubectl:write
