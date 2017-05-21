@@ -14,9 +14,9 @@ class Get(KubectlBase):
 
     opts=[]
     try:
-        opts = self._get_opts()
+      opts = self._get_opts()
     except:
-        pass
+      pass
 
     result = self.call_json('get',resource_type, *opts)
 
@@ -24,14 +24,14 @@ class Get(KubectlBase):
     self.response.content(parsed_results, template="resource_list").send()
 
   def _get_opts(self):
-    args=[]
+    opts=[]
     if self.request.get_optional_option('ALL-NAMESPACES') == "true":
-      args.append("--all-namespaces")
+      opts.append("--all-namespaces")
     if self.request.get_optional_option('SHOW-ALL') == "true":
-      args.append("--show-all")
+      opts.append("--show-all")
     selector=self.request.get_optional_option('SELECTOR')
     if selector is not None:
-      args.append("--selector=%s" %selector)
+      opts.append("--selector=%s" %selector)
     sort_by=self.request.get_optional_option('SORT-BY')
     if sort_by is not None:
       args.append("--sort-by=%s" %sort_by)
