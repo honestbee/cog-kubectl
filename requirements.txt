@@ -1,0 +1,1 @@
+git+https://github.com/operable/pycog3.git@c74029d790382cda92f0f49c7cbed14bb78cc098

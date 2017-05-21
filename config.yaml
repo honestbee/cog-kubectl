@@ -1,0 +1,115 @@
+---
+cog_bundle_version: 4
+name: kubectl
+description: Interact with Kubernetes
+long_description: >
+  This bundle provides commands for exposing kubectl commands through Chat.
+  Permissions are used to control which users are authorized to run each command. Listing and searching
+  for resources requires the kubectl:read permission. Modifying the state or other
+  values of a resource requires the kubectl:write permission. And, destroying a
+  resource requires the kubectl:admin permission.
+version: 0.0.1
+docker:
+  image: quay.io/honestbee/cog-kubectl
+  tag: 0.0.1
+permissions:
+  - kubectl:read
+  - kubectl:write
+  - kubectl:admin
+config:
+  notes: >
+    When creating the service account for use with the following environment
+    variables, make sure the RBAC role used has permissions as required.
+  env:
+    - var: KUBERNETES_TOKEN
+      description: Requried service account token for Kubernetes API access
+    - var: KUBERNETES_SERVER
+      description: Required Kubernetes API endpoint
+    - var: KUBERNETES_CERT
+      description: Required Kubernetes API certificate for secure execution
+commands:
+  get:
+    description: Enumerate and view existing Hosted Zones
+    executable: /usr/local/bin/cog-command
+    documentation: |
+      Display one or many resources.
+
+      Valid resource types include:
+
+        * clusters (valid only for federation apiservers)
+        * componentstatuses (aka 'cs')
+        * configmaps (aka 'cm')
+        * daemonsets (aka 'ds')
+        * deployments (aka 'deploy')
+        * endpoints (aka 'ep')
+        * events (aka 'ev')
+        * horizontalpodautoscalers (aka 'hpa')
+        * ingresses (aka 'ing')
+        * jobs
+        * limitranges (aka 'limits')
+        * namespaces (aka 'ns')
+        * networkpolicies
+        * nodes (aka 'no')
+        * persistentvolumeclaims (aka 'pvc')
+        * persistentvolumes (aka 'pv')
+        * pods (aka 'po')
+        * podsecuritypolicies (aka 'psp')
+        * podtemplates
+        * replicasets (aka 'rs')
+        * replicationcontrollers (aka 'rc')
+        * resourcequotas (aka 'quota')
+        * secrets
+        * serviceaccounts (aka 'sa')
+        * services (aka 'svc')
+        * statefulsets
+        * storageclasses
+        * thirdpartyresources
+
+      This command will hide resources that have completed. For instance, pods that are in the Succeeded or Failed phases. You can see the full results for any resource by providing the '--show-all' flag.
+
+      kubectl:get pods
+    options:
+      all-namespaces:
+        type: bool
+        required: false
+        description: If present, list the requested object(s) across all namespaces.
+      selector:
+        type: list
+        required: false
+        description: Selector (label query) to filter on
+        short_flag: l
+      show-all:
+        type: bool
+        required: false
+        description: When printing, show all resources (default hide terminated pods.)
+        short_flag: a
+      sort-by:
+        type: list
+        required: false
+        description: If non-empty, sort list types using this field specification.  The field specification is expressed as a JSONPath expression
+    rules:
+      - must have kubectl:read
+templates:
+  resource_listing:
+    body: |
+      ~each var=$results as=r~
+      ~if cond=$r.Kind == "Pod" ~
+      ~attachment color=$r.Color~
+      **Pod Namespace:** ~$r.Namespace~
+      **Pod Name:** ~$r.Name~
+      **Pod Ready:** ~$r.ReadyCount~/~$r.Count~
+      **Pod Status:** ~$r.Status~
+      **Pod Restarts:** ~$r.Restarts~
+      **Pod Timestamp:** ~$r.Timestamp~
+      **Pod Node:** ~$r.Node~
+      ~end~
+      ~if cond=$r.Kind == "Service" ~
+      ~attachment color=$r.Color~
+      **Service Namespace:** ~$r.Namespace~
+      **Service Name:** ~$r.Name~
+      **Service ClusterIP:** ~$r.ClusterIP~
+      **Service InternalIP:** ~$r.InternalIP~
+      **Service Port(s):** ~$r.Ports~
+      ~end~
+      ~end~
+      ~end~

@@ -1,0 +1,9 @@
+version: '2'
+services:
+  command:
+    image: quay.io/honestbee/kubectl:0.0.1
+    command: /usr/local/bin/cog-command
+    env_file:
+    - ".env"
+    volumes:
+    - .:/home/bundle/kubectl
