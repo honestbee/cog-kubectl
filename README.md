@@ -15,6 +15,7 @@ Early trial of a bundle to expose kubectl commands from Slack.
 ## References
 
 - [kubectl docs](https://kubernetes.io/docs/user-guide/kubectl-overview/)
+- [kubey](https://github.com/bradrf/kubey)
 
 # Installing
 
@@ -42,6 +43,7 @@ cogctl bundle config create kubectl config.yaml --layer=base
 
 ```
 !permission grant kubectl:read cog-admin
+!permission grant kubectl:write cog-admin
 !kubectl:get po
 ```
 
