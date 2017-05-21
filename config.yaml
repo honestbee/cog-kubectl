@@ -131,5 +131,10 @@ templates:
       **Service InternalIP:** ~$r.InternalIP~
       **Service Port(s):** ~$r.Ports~
       ~end~
+      ~if cond=$r.Kind == Deployment ~
+      ~attachment color=$r.Color~
+      **Deploymen Namespace:** ~$r.Namespace~
+      **Deploymen Name:** ~$r.Name~
+      ~end~
       ~end~
       ~end~
