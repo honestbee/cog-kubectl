@@ -65,7 +65,8 @@ class KubectlBase(Command):
       "Kind": item["kind"],
       "Namespace": item["metadata"]["namespace"],
       "Name": item["metadata"]["name"],
-      "Timestamp": item["metadata"]["creationTimestamp"]
+      "Timestamp": item["metadata"]["creationTimestamp"],
+      "Color": "gray"
     }
     if item["kind"] == 'Pod':
       common.update({
@@ -109,9 +110,9 @@ class KubectlBase(Command):
       common.update({} if status is None else {"Available": status.get("availableReplicas")})
       common.update({} if status is None else {"Unavailable": status.get("unavailableReplicas")})
       common.update({} if status is None else {"Updated": status.get("updatedReplicas")})
-      if common["Desired"] <= common["Available"]:
+      if common["Available"] is not None and common["Desired"] <= common["Available"]:
         common["Color"] = "green"
-      elif common["Desired"] <= common["Current"]:
+      elif common["Current"] is not None and common["Desired"] <= common["Current"]:
         common["Color"] = "orange"
       else:
         common["Color"] = "red"

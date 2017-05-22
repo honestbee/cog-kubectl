@@ -22,7 +22,7 @@ class Run(KubectlBase):
     result = self.call_json('run',name, *opts)
 
     parsed_results=self._parse(result)
-    self.response.content(parsed_results, template="resource_list").send()
+    self.response.content(parsed_results, template="deployment_list").send()
 
   def _get_opts(self):
     opts=[]

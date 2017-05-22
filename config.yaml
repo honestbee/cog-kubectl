@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.0.8
+version: 0.0.9
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.0.8
+  tag: 0.0.9
 permissions:
   - kubectl:read
   - kubectl:write
@@ -140,6 +140,33 @@ templates:
   resource_list:
     body: |
       ~each var=$results as=r~
+      ~attachment color=$r.Color~
+      **~$r.Kind~ Namespace:** ~$r.Namespace~
+      **~$r.Kind~ Name:** ~$r.Name~
+      ~if cond=$r.Kind == Pod ~
+      **Pod Ready:** ~$r.ReadyCount~/~$r.Count~
+      **Pod Status:** ~$r.Status~
+      **Pod Restarts:** ~$r.Restarts~
+      **Pod Node:** ~$r.Node~
+      ~end~
+      ~if cond=$r.Kind == Service ~
+      **Service ClusterIP:** ~$r.ClusterIP~
+      **Service Type:** ~$r.Type~
+      **Service ExternalIP:** ~$r.ExternalIP~
+      **Service Timestamp:** ~$r.Timestamp~
+      ~end~
+      ~if cond=$r.Kind == Deployment ~
+      ~if cond=$r.Current not_empty?~**Deployment Current:** ~$r.Current~~end~
+      ~if cond=$r.Available not_empty?~**Deployment Available:** ~$r.Available~~end~
+      ~if cond=$r.Unavailable not_empty?~**Deployment Unavailable:** ~$r.Unavailable~~end~
+      ~if cond=$r.Updated not_empty?~**Deployment Updated:** ~$r.Updated~~end~
+      ~end~
+      **~$r.Kind~ Timestamp:** ~$r.Timestamp~
+      ~end~
+      ~end~
+  pod_list:
+    body: |
+      ~each var=$results as=r~
       ~if cond=$r.Kind == Pod ~
       ~attachment color=$r.Color~
       **Pod Namespace:** ~$r.Namespace~
@@ -150,5 +177,29 @@ templates:
       **Pod Timestamp:** ~$r.Timestamp~
       **Pod Node:** ~$r.Node~
       ~end~
+      ~end~
+      ~end~
+  service_list:
+    body: |
+      ~each var=$results as=r~
+      ~attachment color=$r.Color~
+      **Service Namespace:** ~$r.Namespace~
+      **Service Name:** ~$r.Name~
+      **Service ClusterIP:** ~$r.ClusterIP~
+      **Service Type:** ~$r.Type~
+      **Service ExternalIP:** ~$r.ExternalIP~
+      **Service Timestamp:** ~$r.Timestamp~
+      ~end~
+      ~end~
+  deployment_list:
+    body: |
+      ~each var=$results as=r~
+      ~attachment color=$r.Color~
+      **Deployment Namespace:** ~$r.Namespace~
+      **Deployment Current:** ~$r.Current~
+      **Deployment Available:** ~$r.Available~
+      **Deployment Unavailable:** ~$r.Unavailable~
+      **Deployment Updated:** ~$r.Updated~
+      **Deployment Timestamp:** ~$r.Timestamp~
       ~end~
       ~end~
