@@ -74,7 +74,7 @@ class KubectlBase(Command):
         "Restarts" : sum([c["restartCount"] for c in item["status"]["containerStatuses"]]),
         "Status": item["status"]["phase"],
         "Color": {
-            "Pending": "yellow",
+            "Pending": "blue",
             "Failed": "red",
             "Succeeded": "green",
             "Running": "green"
@@ -92,7 +92,11 @@ class KubectlBase(Command):
       elif common["Type"] == "NodePort":
         common["ExternalIP"] = "Nodes"
       elif common["Type"] == "LoadBalancer":
-        common["ExternalIP"] = ",".join([i["hostname"] for i in item["status"]["loadBalancer"]["ingress"]])
+        ingress = item["status"]["loadBalancer"].get("ingress")
+        if ingress is not None:
+          common["ExternalIP"] = ",".join([i["hostname"] for i in ingress])
+        else:
+          common["ExternalIP"] = "Pending"
       else:
         common["ExternalIP"] == "Unknown"
     elif item["kind"] == 'Deployment':
@@ -105,5 +109,11 @@ class KubectlBase(Command):
       common.update({} if status is None else {"Available": status.get("availableReplicas")})
       common.update({} if status is None else {"Unavailable": status.get("unavailableReplicas")})
       common.update({} if status is None else {"Updated": status.get("updatedReplicas")})
+      if common["Desired"] <= common["Available"]:
+        common["Color"] = "green"
+      elif common["Desired"] <= common["Current"]:
+        common["Color"] = "orange"
+      else:
+        common["Color"] = "red"
     # self.response.debug(json.dumps(common))
     return common
