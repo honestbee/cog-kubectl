@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.0.7
+version: 0.0.8
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.0.7
+  tag: 0.0.8
 permissions:
   - kubectl:read
   - kubectl:write
@@ -31,7 +31,7 @@ commands:
   get:
     description: Display one or many resources.
     executable: /usr/local/bin/cog-command
-    documentation: |
+    long_description: |
       Valid resource types include:
 
         * clusters (valid only for federation apiservers)
@@ -90,10 +90,10 @@ commands:
   run:
     description: Create and run a particular image, possibly replicated.
     executable: /usr/local/bin/cog-command
-    documentation: |
+    long_description: |
       Creates a deployment or job to manage the created container(s).
 
-      kubectl:run nginx --image=nginx:1.11-alpine --port
+      kubectl:run nginx --image=nginx:1.11-alpine --port=80
     options:
       image:
         type: string
@@ -107,6 +107,33 @@ commands:
         type: bool
         required: false
         description: If true, a public, external service is created for the container(s) which are run
+    rules:
+      - must have kubectl:write
+  expose:
+    description: Expose a resource as a new Kubernetes service.
+    executable: /usr/local/bin/cog-command
+    long_description: |
+      Looks up a deployment, service, replica set, replication controller or pod by name and uses the selector for that resource as the selector for a new service on the specified port. A deployment or replica set will be exposed as a service only if its selector is convertible to a selector that service supports, i.e. when the selector contains only the matchLabels component. Note that if no port is specified via --port and the exposed resource has multiple ports, all will be re-used by the new service. Also if no labels are specified, the new service will re-use the labels from the resource it exposes.
+
+      Possible resources include (case insensitive):
+
+      pod (po), service (svc), replicationcontroller (rc), deployment (deploy), replicaset (rs)
+
+      kubectl expose deployment nginx --port=80 --container-port=8000
+    arguments: "<resouce_type> <resource_name>"
+    options:
+      type:
+        type: string
+        required: false
+        description: Type for this service (ClusterIP, NodePort, or LoadBalancer). Default is 'ClusterIP'.
+      port:
+        type: string
+        required: false
+        description: The port that the service should serve on. Copied from the resource being exposed, if unspecified
+      target-port:
+        type: string
+        required: false
+        description: Name or number for the port on the container that the service should direct traffic to. Optional.
     rules:
       - must have kubectl:write
 templates:
