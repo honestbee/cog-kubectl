@@ -15,7 +15,11 @@ class Expose(KubectlBase):
 
     resource_type = self.request.args[0]
     resource_name = self.request.args[1]
-    opts = self._get_opts()
+    opts=[]
+    try:
+      opts = self._get_opts()
+    except:
+      pass
 
     result = self.call_json('expose', resource_type, resource_name, *opts)
 

@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.0.9
+version: 0.1.0
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.0.9
+  tag: 0.1.0
 permissions:
   - kubectl:read
   - kubectl:write
@@ -153,9 +153,9 @@ templates:
       **Service ClusterIP:** ~$r.ClusterIP~
       **Service Type:** ~$r.Type~
       **Service ExternalIP:** ~$r.ExternalIP~
-      **Service Timestamp:** ~$r.Timestamp~
       ~end~
       ~if cond=$r.Kind == Deployment ~
+      **Deployment Desired:** ~$r.Desired~
       ~if cond=$r.Current not_empty?~**Deployment Current:** ~$r.Current~~end~
       ~if cond=$r.Available not_empty?~**Deployment Available:** ~$r.Available~~end~
       ~if cond=$r.Unavailable not_empty?~**Deployment Unavailable:** ~$r.Unavailable~~end~

@@ -10,7 +10,6 @@ class Get(KubectlBase):
         self.fail("Missing resource type to get")
 
     resource_type = self.request.args[0]
-    # resource_types = resource_type.split(",")
 
     opts=[]
     try:
