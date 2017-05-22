@@ -58,16 +58,17 @@ class KubectlBase(Command):
         results.append(self._parse_item(data))
     return results
 
+  ## TODO: Fix this ugly hack
   def _parse_item(self, item):
-    # self.response.debug(json.dumps(item))
-    shared = {
+    self.response.debug(json.dumps(item))
+    common = {
       "Kind": item["kind"],
       "Namespace": item["metadata"]["namespace"],
       "Name": item["metadata"]["name"],
       "Timestamp": item["metadata"]["creationTimestamp"]
     }
     if item["kind"] == 'Pod':
-      shared.update({
+      common.update({
         "Count": len(item["status"]["containerStatuses"]),
         "ReadyCount": len([c for c in item["status"]["containerStatuses"] if c["ready"]]),
         "Restarts" : sum([c["restartCount"] for c in item["status"]["containerStatuses"]]),
@@ -81,26 +82,28 @@ class KubectlBase(Command):
         "Node": item["spec"]["nodeName"]
       })
     elif item["kind"] == 'Service':
-      shared.update({
+      common.update({
         "ClusterIP": item["spec"]["clusterIP"],
         "Ports": item["spec"]["ports"],
         "Type": item["spec"]["type"]
       })
-      if shared["Type"] == "ClusterIP":
-        shared["ExternalIP"] = "None"
-      elif shared["Type"] == "NodePort":
-        shared["ExternalIP"] = "Nodes"
-      elif shared["Type"] == "LoadBalancer":
-        shared["ExternalIP"] = ",".join([i["hostname"] for i in item["status"]["loadBalancer"]["ingress"]])
+      if common["Type"] == "ClusterIP":
+        common["ExternalIP"] = "None"
+      elif common["Type"] == "NodePort":
+        common["ExternalIP"] = "Nodes"
+      elif common["Type"] == "LoadBalancer":
+        common["ExternalIP"] = ",".join([i["hostname"] for i in item["status"]["loadBalancer"]["ingress"]])
       else:
-        shared["ExternalIP"] == "Unknown"
+        common["ExternalIP"] == "Unknown"
     elif item["kind"] == 'Deployment':
-      shared.update({
+      common.update({
         "Desired": item["spec"]["replicas"],
-        "Current": item["status"]["replicas"],
-        "Available": item["status"]["availableReplicas"],
-        "Updated": item["status"]["updatedReplicas"],
         "Color": "gray"
       })
-    # self.response.debug(json.dumps(shared))
-    return shared
+      status = item.get("status")
+      common.update({} if status is None else {"Current": status.get("replicas")})
+      common.update({} if status is None else {"Available": status.get("availableReplicas")})
+      common.update({} if status is None else {"Unavailable": status.get("unavailableReplicas")})
+      common.update({} if status is None else {"Updated": status.get("updatedReplicas")})
+    # self.response.debug(json.dumps(common))
+    return common
