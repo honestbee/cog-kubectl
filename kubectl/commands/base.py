@@ -59,11 +59,15 @@ class KubectlBase(Command):
     return results
 
   def _parse_item(self, item):
+    # self.response.debug(json.dumps(item))
+    shared = {
+      "Kind": item["kind"],
+      "Namespace": item["metadata"]["namespace"],
+      "Name": item["metadata"]["name"],
+      "Timestamp": item["metadata"]["creationTimestamp"]
+    }
     if item["kind"] == 'Pod':
-      return {
-        "Kind": item["kind"],
-        "Namespace": item["metadata"]["namespace"],
-        "Name": item["metadata"]["name"],
+      shared.update({
         "Count": len(item["status"]["containerStatuses"]),
         "ReadyCount": len([c for c in item["status"]["containerStatuses"] if c["ready"]]),
         "Restarts" : sum([c["restartCount"] for c in item["status"]["containerStatuses"]]),
@@ -72,20 +76,31 @@ class KubectlBase(Command):
             "Pending": "yellow",
             "Failed": "red",
             "Succeeded": "green",
-            "Running": "green",
+            "Running": "green"
         }.get(item["status"]["phase"],"gray"),
-        "Node": item["spec"]["nodeName"],
-        "Timestamp": item["metadata"]["creationTimestamp"]
-      }
+        "Node": item["spec"]["nodeName"]
+      })
     elif item["kind"] == 'Service':
-      return {
-        "Kind": item["kind"],
-        "Namespace": item["metadata"]["namespace"],
-        "Name": item["metadata"]["name"]
-      }
+      shared.update({
+        "ClusterIP": item["spec"]["clusterIP"],
+        "Ports": item["spec"]["ports"],
+        "Type": item["spec"]["type"]
+      })
+      if shared["Type"] == "ClusterIP":
+        shared["ExternalIP"] = "None"
+      elif shared["Type"] == "NodePort":
+        shared["ExternalIP"] = "Nodes"
+      elif shared["Type"] == "LoadBalancer":
+        shared["ExternalIP"] = ",".join([i["hostname"] for i in item["status"]["loadBalancer"]["ingress"]])
+      else:
+        shared["ExternalIP"] == "Unknown"
     elif item["kind"] == 'Deployment':
-      return {
-        "Kind": item["kind"],
-        "Namespace": item["metadata"]["namespace"],
-        "Name": item["metadata"]["name"]
-      }
+      shared.update({
+        "Desired": item["spec"]["replicas"],
+        "Current": item["status"]["replicas"],
+        "Available": item["status"]["availableReplicas"],
+        "Updated": item["status"]["updatedReplicas"],
+        "Color": "gray"
+      })
+    # self.response.debug(json.dumps(shared))
+    return shared
