@@ -62,7 +62,17 @@ docker-compose run command sh
     ```
 
     ```bash
-    env COG_ARGC=2 COG_ARGV_0=deploy COG_ARGV_1=nginx COG_OPTS=container-port,type COG_OPT_CONTAINER-PORT=80 COG_OPT_TYPE=loadBalancer python -c "from kubectl.commands.expose import Expose;c=Expose();c.execute()"
+    env COG_ARGC=2 COG_ARGV_0=deploy COG_ARGV_1=nginx COG_OPTS=container-port,type COG_OPT_CONTAINER-PORT=80 COG_OPT_TYPE=LoadBalancer python -c "from kubectl.commands.expose import Expose;c=Expose();c.execute()"
+    ```
+
+1.  Get the nginx Service by label:
+
+    ```bash
+    kubectl get svc -l run=nginx
+    ```
+
+    ```bash
+    COG_ARGC=1 COG_ARGV_0=svc COG_OPTS=selector COG_OPT_SELECTOR_COUNT=1 COG_OPT_SELECTOR_0=run=nginx python -c "from kubectl.commands.get import Get;c=Get();c.execute()"
     ```
 
 
