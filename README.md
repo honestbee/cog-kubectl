@@ -12,6 +12,10 @@ Early trial of a bundle to expose kubectl commands from Slack.
 !kubectl:run <name> --image=<image> --labels <command> [-n namespace] [--generator gen] [--port] [--expose=false]
 ```
 
+![Image 1](pictures/img_01.png)
+
+![Image 2](pictures/img_02.png)
+
 ## References
 
 - [kubectl docs](https://kubernetes.io/docs/user-guide/kubectl-overview/)
