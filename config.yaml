@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.0.6
+version: 0.0.7
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.0.6
+  tag: 0.0.7
 permissions:
   - kubectl:read
   - kubectl:write
@@ -82,7 +82,7 @@ commands:
         description: When printing, show all resources (default hide terminated pods.)
         short_flag: a
       sort-by:
-        type: list
+        type: string
         required: false
         description: If non-empty, sort list types using this field specification.  The field specification is expressed as a JSONPath expression
     rules:
