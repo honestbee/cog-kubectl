@@ -31,7 +31,7 @@ class Get(KubectlBase):
       opts.append("--show-all")
     selector=self.request.get_optional_option('SELECTOR')
     if selector is not None:
-      opts.append("--selector=%s" %selector)
+      opts.append("--selector=%s" % ",".join(selector))
     sort_by=self.request.get_optional_option('SORT-BY')
     if sort_by is not None:
       opts.append("--sort-by=%s" %sort_by)
