@@ -1,5 +1,5 @@
 BUNDLE_NAME          = kubectl
-BUNDLE_VERSION      ?= 0.0.5
+BUNDLE_VERSION      ?= 0.0.6
 IMAGE_TAG            = quay.io/honestbee/$(BUNDLE_NAME):$(BUNDLE_VERSION)
 
 .PHONY: docker docker-clean docker-shell docker-fresh
