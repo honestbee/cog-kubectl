@@ -286,7 +286,7 @@ templates:
   pre:
     body: |
       ~each var=$results~
-      ```
-      ~$item~
-      ```
+      ```~each var=$item.body as=l~
+      ~$l~
+      ~end~```
       ~end~
