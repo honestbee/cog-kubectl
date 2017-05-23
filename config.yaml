@@ -283,3 +283,10 @@ templates:
       **~$r.Kind~ Timestamp:** ~$r.Timestamp~
       ~end~
       ~end~
+  pre:
+    body: |
+      ~each var=$results~
+      ```~each var=$item.body as=l~
+      ~$l~
+      ~end~```
+      ~end~
