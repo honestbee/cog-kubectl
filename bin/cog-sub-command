@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+import importlib
+import os
+
+bundle_name = os.getenv("COG_BUNDLE")
+command_name = os.getenv("COG_COMMAND").replace("-","_")
+class_name = command_name.capitalize()
+full_path = "%s.commands.%s" % (bundle_name, command_name)
+
+bundle_module = importlib.import_module(full_path)
+klass = getattr(bundle_module, class_name)
+cmd = klass()
+cmd.execute()

@@ -158,6 +158,17 @@ commands:
         description: Precondition for current size. Requires that the current size of the resource match this value in order to scale.
     rules:
       - must have kubectl:write
+  set-image:
+    description: Update image of a pod template
+    executable: /usr/local/bin/cog-sub-command
+    long_description: |
+      Update existing container image(s) of resources.
+
+      Possible resources include (case insensitive):
+        pod (po), replicationcontroller (rc), deployment (deploy), daemonset (ds), job, replicaset (rs)
+    arguments: "RESOURCE_TYPE/RESOURCE_NAME CONTAINER_NAME_1=CONTAINER_IMAGE_1 ... CONTAINER_NAME_N=CONTAINER_IMAGE_N"
+    rules:
+      - must have kubectl:write
 templates:
   resource_list:
     body: |

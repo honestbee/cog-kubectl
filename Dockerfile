@@ -20,7 +20,8 @@ RUN set -ex \
 
 # Copy and install bundle code
 COPY $BUNDLE_NAME/ $BUNDLE_DIR/$BUNDLE_NAME/
-
+# add support for separate sub commands
+COPY bin/ $BUNDLE_DIR/bin/
 RUN set -ex \
   && pip install . \
   && mkdir -p /etc/kube/
