@@ -15,7 +15,8 @@ class Logs(KubectlBase):
       pass
 
     # just pass through all arguments after the options
-    opts.extend(self.request.args)
+    if self.request.args is not None:
+      opts.extend(self.request.args)
 
     result = self.call_capture('logs', *opts)
     print(result)
