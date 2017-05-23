@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup (
     name = "kubectl",
-    version = "0.1.8",
+    version = "0.1.9",
     scripts = ["bin/cog-sub-command"],
     description = "Cog commands for kubectl",
     author = "Vincent De Smet",
