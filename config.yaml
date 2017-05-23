@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.1.10
+version: 0.1.11
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.1.10
+  tag: 0.1.11
 permissions:
   - kubectl:read
   - kubectl:write
