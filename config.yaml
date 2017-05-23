@@ -242,8 +242,8 @@ templates:
     body: |
       ~each var=$results as=r~
       ~attachment color=$r.Color~
-      **~$r.Kind~ Namespace:** ~$r.Namespace~
       **~$r.Kind~ Name:** ~$r.Name~
+      **Namespace:** ~$r.Namespace~
       ~if cond=$r.Kind == Pod ~
       **Pod Ready:** ~$r.ReadyCount~/~$r.Count~
       **Pod Status:** ~$r.Status~
@@ -263,45 +263,5 @@ templates:
       ~if cond=$r.Updated not_empty?~**Deployment Updated:** ~$r.Updated~~end~
       ~end~
       **~$r.Kind~ Timestamp:** ~$r.Timestamp~
-      ~end~
-      ~end~
-  pod_list:
-    body: |
-      ~each var=$results as=r~
-      ~if cond=$r.Kind == Pod ~
-      ~attachment color=$r.Color~
-      **Pod Namespace:** ~$r.Namespace~
-      **Pod Name:** ~$r.Name~
-      **Pod Ready:** ~$r.ReadyCount~/~$r.Count~
-      **Pod Status:** ~$r.Status~
-      **Pod Restarts:** ~$r.Restarts~
-      **Pod Timestamp:** ~$r.Timestamp~
-      **Pod Node:** ~$r.Node~
-      ~end~
-      ~end~
-      ~end~
-  service_list:
-    body: |
-      ~each var=$results as=r~
-      ~attachment color=$r.Color~
-      **Service Namespace:** ~$r.Namespace~
-      **Service Name:** ~$r.Name~
-      **Service ClusterIP:** ~$r.ClusterIP~
-      **Service Type:** ~$r.Type~
-      **Service ExternalIP:** ~$r.ExternalIP~
-      **Service Timestamp:** ~$r.Timestamp~
-      ~end~
-      ~end~
-  deployment_list:
-    body: |
-      ~each var=$results as=r~
-      ~attachment color=$r.Color~
-      **Deployment Namespace:** ~$r.Namespace~
-      **Deployment Desired:** ~$r.Desired~
-      ~if cond=$r.Current not_empty?~**Deployment Current:** ~$r.Current~~end~
-      ~if cond=$r.Available not_empty?~**Deployment Available:** ~$r.Available~~end~
-      ~if cond=$r.Unavailable not_empty?~**Deployment Unavailable:** ~$r.Unavailable~~end~
-      ~if cond=$r.Updated not_empty?~**Deployment Updated:** ~$r.Updated~~end~
-      **Deployment Timestamp:** ~$r.Timestamp~
       ~end~
       ~end~

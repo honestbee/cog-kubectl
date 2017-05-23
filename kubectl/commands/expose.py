@@ -24,7 +24,7 @@ class Expose(KubectlBase):
     result = self.call_json('expose', resource_type, resource_name, *opts)
 
     parsed_results=self._parse(result)
-    self.response.content(parsed_results, template="service_list").send()
+    self.response.content(parsed_results, template="resource_list").send()
 
   def _get_opts(self):
     opts=[]
