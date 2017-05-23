@@ -197,7 +197,7 @@ commands:
     rules:
       - must have kubectl:write
   set-image:
-    description: Update image of a pod template
+    description: Update image of a pod template.
     executable: /usr/local/bin/cog-sub-command
     long_description: |
       Update existing container image(s) of resources.
@@ -207,6 +207,24 @@ commands:
     arguments: "RESOURCE_TYPE/RESOURCE_NAME CONTAINER_NAME_1=CONTAINER_IMAGE_1 ... CONTAINER_NAME_N=CONTAINER_IMAGE_N"
     rules:
       - must have kubectl:write
+  describe:
+    description: Show details of a specific resource or group of resources.
+    executable: /usr/local/bin/cog-sub-command
+    long_description: |
+      This command joins many API calls together to form a detailed description of a given resource or group of resources.
+
+        $ kubectl describe TYPE NAME_PREFIX
+
+      will first check for an exact match on TYPE and NAME PREFIX. If no such resource exists, it will output details for every resource that has a name prefixed with NAME PREFIX.
+    arguments: "RESOURCE_TYPE/RESOURCE_NAME CONTAINER_NAME_1=CONTAINER_IMAGE_1 ... CONTAINER_NAME_N=CONTAINER_IMAGE_N"
+    options:
+      selector:
+        type: list
+        required: false
+        description: Selector (label query) to filter on
+        short_flag: l
+    rules:
+      - must have kubectl:read
   delete:
     description: Delete resources by filenames, stdin, resources and names, or by resources and label selector.
     executable: /usr/local/bin/cog-command
