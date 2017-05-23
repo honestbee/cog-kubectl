@@ -9,15 +9,15 @@ class Get(KubectlBase):
     if self.request.args == None:
         self.fail("Missing resource type to get")
 
-    resource_type = self.request.args[0]
-
     opts=[]
     try:
       opts = self._get_opts()
     except:
       pass
 
-    result = self.call_json('get',resource_type, *opts)
+    opts.extend(self.request.args)
+
+    result = self.call_json('get', *opts)
 
     parsed_results=self._parse(result)
     self.response.content(parsed_results, template="resource_list").send()
