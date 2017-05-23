@@ -8,12 +8,6 @@ class Set_image(KubectlBase):
   def run(self):
     if self.request.args == None:
       self.fail("Resource type and name missing")
-    elif len(self.request.args) < 2:
-      self.fail("Resource name to expose missing")
-    elif len(self.request.args) > 2:
-      self.fail("Too many arguments")
 
-    resource = self.request.args[0]
-    kvpairs = self.request.args[1:]
-    result = self.call_capture('set','image', resource, *kvpairs)
+    result = self.call_capture('set','image', *self.request.args)
     print(result)
