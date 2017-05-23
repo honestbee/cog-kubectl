@@ -21,6 +21,12 @@ Early trial of a bundle to expose kubectl commands from Slack.
 - [kubectl docs](https://kubernetes.io/docs/user-guide/kubectl-overview/)
 - [kubey](https://github.com/bradrf/kubey)
 
+Other kubectl slack bots:
+
+- [kubebot](https://github.com/harbur/kubebot)
+- [slack8s](https://github.com/ultimateboy/slack8s)
+- [kubectl-slackbot](https://github.com/beeradb/kubectl-slackbot)
+
 # Installing
 
 ## From GitHub repository:
@@ -104,15 +110,4 @@ Run the command using the bundle:
 docker-compose run command
 ```
 
-## Running Bundle through Shell
-
-similar to above, set environment variables (either via `.env`) and confirm
-```bash
-docker-compose config
-```
-
-```bash
-$ docker-compose run command sh
-$ python -c "from kubectl.commands.get import Get;g=Get();g.execute()"
-```
-
+[Running Bundle through Shell](TEST.md)
