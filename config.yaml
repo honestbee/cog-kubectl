@@ -138,7 +138,7 @@ commands:
         required: true
         description: The image for the container to run.
       port:
-        type: string
+        type: int
         required: false
         description: The port that this container exposes.  If --expose is true, this is also the port used by the service that is created.
       expose:
@@ -165,11 +165,11 @@ commands:
         required: false
         description: Type for this service (ClusterIP, NodePort, or LoadBalancer). Default is 'ClusterIP'.
       port:
-        type: string
+        type: int
         required: false
         description: The port that the service should serve on. Copied from the resource being exposed, if unspecified
       target-port:
-        type: string
+        type: int
         required: false
         description: Name or number for the port on the container that the service should direct traffic to. Optional.
     rules:
@@ -187,11 +187,11 @@ commands:
     arguments: "RESOUCE_TYPE/RESOURCE_NAME"
     options:
       replicas:
-        type: string
+        type: int
         required: true
         description: The new desired number of replicas. Required.
       current-replicas:
-        type: string
+        type: int
         required: false
         description: Precondition for current size. Requires that the current size of the resource match this value in order to scale.
     rules:
