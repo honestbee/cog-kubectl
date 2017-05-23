@@ -76,13 +76,17 @@ docker-compose run command sh
     ```
 
 
-TODO:
-
 1.  Scale the nginx Deployment:
 
     ```bash
     kubectl scale deploy nginx --replicas=3
     ```
+
+    ```bash
+    COG_ARGC=1 COG_ARGV_0=deploy/nginx COG_OPTS=replicas COG_OPT_REPLICAS=4 python -c "from kubectl.commands.scale import Scale;c=Scale();c.execute()"
+    ```
+
+TODO:
 
 1.  Set the image tag for nginx Deployment:
 

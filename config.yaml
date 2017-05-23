@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.1.0
+version: 0.1.1
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.1.0
+  tag: 0.1.1
 permissions:
   - kubectl:read
   - kubectl:write
@@ -136,6 +136,28 @@ commands:
         description: Name or number for the port on the container that the service should direct traffic to. Optional.
     rules:
       - must have kubectl:write
+  scale:
+    description: Set a new size for a Deployment, ReplicaSet, Replication Controller, or Job.
+    executable: /usr/local/bin/cog-command
+    long_description: |
+      Set a new size for a Deployment, ReplicaSet, Replication Controller, or Job.
+      Scale also allows users to specify one or more preconditions for the scale action.
+
+      If --current-replicas or --resource-version is specified, it is validated before the scale is attempted, and it is guaranteed that the precondition holds true when the scale is sent to the server.
+
+      kubectl scale --current-replicas=2 --replicas=3 deployment/mysql
+    arguments: "<resouce_type>/<resource_name>"
+    options:
+      replicas:
+        type: string
+        required: true
+        description: The new desired number of replicas. Required.
+      current-replicas:
+        type: string
+        required: false
+        description: Precondition for current size. Requires that the current size of the resource match this value in order to scale.
+    rules:
+      - must have kubectl:write
 templates:
   resource_list:
     body: |
@@ -196,10 +218,11 @@ templates:
       ~each var=$results as=r~
       ~attachment color=$r.Color~
       **Deployment Namespace:** ~$r.Namespace~
-      **Deployment Current:** ~$r.Current~
-      **Deployment Available:** ~$r.Available~
-      **Deployment Unavailable:** ~$r.Unavailable~
-      **Deployment Updated:** ~$r.Updated~
+      **Deployment Desired:** ~$r.Desired~
+      ~if cond=$r.Current not_empty?~**Deployment Current:** ~$r.Current~~end~
+      ~if cond=$r.Available not_empty?~**Deployment Available:** ~$r.Available~~end~
+      ~if cond=$r.Unavailable not_empty?~**Deployment Unavailable:** ~$r.Unavailable~~end~
+      ~if cond=$r.Updated not_empty?~**Deployment Updated:** ~$r.Updated~~end~
       **Deployment Timestamp:** ~$r.Timestamp~
       ~end~
       ~end~
