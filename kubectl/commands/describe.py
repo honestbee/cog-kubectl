@@ -21,6 +21,7 @@ class Describe(KubectlBase):
     try:
       # takes in array of objects from stdin
       if self.request.input is not None:
+        self.response.debug(json.dumps(self.request.input))
         # assume all input objects have a "Name" key or fail
         opts.extend([i["Name"] for i in self.request.input])
     except:
