@@ -7,11 +7,11 @@ class Scale(KubectlBase):
 
   def run(self):
     if self.request.args == None:
-      self.fail("RESOUCE_TYPE/RESOURCE_NAME required")
+      self.fail("Missing resource to scale")
 
-    resource = self.request.args[0]
     opts = self._get_opts()
-    result = self.call_capture('scale', resource, *opts)
+    opts.extend(self.request.args)
+    result = self.call_capture('scale', *opts)
     print(result)
 
   def _get_opts(self):
