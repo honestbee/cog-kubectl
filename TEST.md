@@ -96,6 +96,16 @@ docker-compose run command sh
     COG_ARGC=2 COG_ARGV_0=deploy/nginx COG_ARGV_1=nginx=nginx:1.11-alpine COG_OPT_REPLICAS=4 python -c "from kubectl.commands.set_image import Set_image;c=Set_image();c.execute()"
     ```
 
+1.  Delete the nginx Deployment:
+
+    ```bash
+    kubectl set image deployment/nginx nginx=nginx:1.11-alpine
+    ```
+
+    ```bash
+    COG_ARGC=1 COG_ARGV_0=deploy/nginx python -c "from kubectl.commands.delete import Delete;c=Delete();c.execute()"
+    ```
+
 TODO:
 
 1.  Create deployment with altnerative entrypoint:

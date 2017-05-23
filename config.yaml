@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.1.2
+version: 0.1.3
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.1.2
+  tag: 0.1.3
 permissions:
   - kubectl:read
   - kubectl:write
@@ -169,6 +169,36 @@ commands:
     arguments: "RESOURCE_TYPE/RESOURCE_NAME CONTAINER_NAME_1=CONTAINER_IMAGE_1 ... CONTAINER_NAME_N=CONTAINER_IMAGE_N"
     rules:
       - must have kubectl:write
+  delete:
+    description: Delete resources by filenames, stdin, resources and names, or by resources and label selector.
+    executable: /usr/local/bin/cog-command
+    long_description: |
+      Resources and label selector are accepted.
+
+      Some resources, such as pods, support graceful deletion. These resources define a default period before they are forcibly terminated (the grace period) but you may override that value with the --grace-period flag, or pass --now to set a grace-period of 1. Because these resources often represent entities in the cluster, deletion may not be acknowledged immediately. If the node hosting a pod is down or cannot reach the API server, termination may take significantly longer than the grace period. To force delete a resource,  you must pass a grace   period of 0 and specify the --force flag.
+
+      IMPORTANT: Force deleting pods does not wait for confirmation that the pod's processes have been terminated, which can leave those processes running until the node detects the deletion and completes graceful deletion. If your processes use shared storage or talk to a remote API and depend on the name of the pod to identify themselves, force deleting those pods may result in multiple processes running on different machines using the same identification which may lead to data corruption or inconsistency. Only force delete pods when you are sure the pod is terminated, or if your application can tolerate multiple copies of the same pod running at once. Also, if you force delete pods the scheduler may place new pods on those nodes before the node has released those resources and causing those pods to be evicted immediately.
+
+      Note that the delete command does NOT do resource version checks, so if someone submits an update to a resource right when you submit a delete, their update will be lost along with the rest of the resource.
+
+      **Note:** Confirmation over Slack not supported
+    arguments: "[RESOUCE_TYPE RESOURCE_NAME]"
+    options:
+      grace-period:
+        type: int
+        required: false
+        description: Period of time in seconds given to the resource to terminate gracefully. Ignored if negative.
+      force:
+        type: bool
+        required: false
+        description: Immediate deletion of some resources may result in inconsistency or data loss and requires confirmation.
+      selector:
+        type: list
+        required: false
+        description: Selector (label query) to filter on
+        short_flag: l
+    rules:
+      - must have kubectl:admin
 templates:
   resource_list:
     body: |
