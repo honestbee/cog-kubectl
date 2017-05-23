@@ -17,7 +17,11 @@ class Describe(KubectlBase):
 
     opts.extend(self.request.args)
     result = self.call_capture('describe', *opts)
+
+    # this breaks when the message exceeds max length and is split...
+    print("```")
     print(result)
+    print("```")
 
   def _get_opts(self):
     opts=[]
