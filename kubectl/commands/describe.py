@@ -16,6 +16,15 @@ class Describe(KubectlBase):
       pass
 
     opts.extend(self.request.args)
+
+    try:
+      # takes in array of objects from stdin
+      if self.request.input is not None:
+        # assume all input objects have a "Name" key or fail
+        opts.extend([i["Name"] for i in self.request.input])
+    except:
+      pass
+
     result = self.call_capture('describe', *opts)
 
     # this breaks when the message exceeds max length and is split...
