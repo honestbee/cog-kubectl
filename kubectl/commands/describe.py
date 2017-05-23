@@ -1,5 +1,6 @@
 from kubectl.commands.base import KubectlBase
 import kubectl.util as util
+from sys import stdout
 
 class Describe(KubectlBase):
   def __init__(self):
@@ -26,7 +27,11 @@ class Describe(KubectlBase):
       pass
 
     result = self.call_capture('describe', *opts)
-    self.response.content(result, template="pre").send()
+
+    # another hack to force output
+    print("COG_TEMPLATE: pre")
+    print(result)
+    stdout.flush()
 
   def _get_opts(self):
     opts=[]
