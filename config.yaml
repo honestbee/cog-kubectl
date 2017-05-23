@@ -120,7 +120,7 @@ commands:
       pod (po), service (svc), replicationcontroller (rc), deployment (deploy), replicaset (rs)
 
       kubectl expose deployment nginx --port=80 --container-port=8000
-    arguments: "<resouce_type> <resource_name>"
+    arguments: "RESOUCE_TYPE RESOURCE_NAME"
     options:
       type:
         type: string
@@ -146,7 +146,7 @@ commands:
       If --current-replicas or --resource-version is specified, it is validated before the scale is attempted, and it is guaranteed that the precondition holds true when the scale is sent to the server.
 
       kubectl scale --current-replicas=2 --replicas=3 deployment/mysql
-    arguments: "<resouce_type>/<resource_name>"
+    arguments: "RESOUCE_TYPE/RESOURCE_NAME"
     options:
       replicas:
         type: string
