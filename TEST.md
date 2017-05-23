@@ -106,6 +106,16 @@ docker-compose run command sh
     COG_ARGC=1 COG_ARGV_0=deploy/nginx python -c "from kubectl.commands.delete import Delete;c=Delete();c.execute()"
     ```
 
+1.  Get logs from a pod:
+
+    ```bash
+    kubectl logs nginx-469155767-ltj2z
+    ```
+
+    ```bash
+    COG_ARGC=1 COG_ARGV_0=nginx-469155767-ltj2z python -c "from kubectl.commands.logs import Logs;c=Logs();c.execute()"
+    ```
+
 TODO:
 
 1.  Create deployment with altnerative entrypoint:

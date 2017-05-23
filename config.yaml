@@ -8,10 +8,10 @@ long_description: >
   for resources requires the kubectl:read permission. Modifying the state or other
   values of a resource requires the kubectl:write permission. And, destroying a
   resource requires the kubectl:admin permission.
-version: 0.1.3
+version: 0.1.4
 docker:
   image: quay.io/honestbee/cog-kubectl
-  tag: 0.1.3
+  tag: 0.1.4
 permissions:
   - kubectl:read
   - kubectl:write
@@ -85,6 +85,44 @@ commands:
         type: string
         required: false
         description: If non-empty, sort list types using this field specification.  The field specification is expressed as a JSONPath expression
+    rules:
+      - must have kubectl:read
+  logs:
+    description: Print the logs for a container in a pod or specified resource.
+    executable: /usr/local/bin/cog-command
+    long_description: |
+      Print the logs for a container in a pod or specified resource. If the pod has only one container, the container name is optional.
+
+      kubectl logs [-f] [-p] (POD | TYPE/NAME) [-c CONTAINER] [options]
+    arguments: "[POD]"
+    options:
+      container:
+        type: string
+        required: false
+        description: Print the logs of this container
+        short_flag: c
+      selector:
+        type: list
+        required: false
+        description: Selector (label query) to filter on
+        short_flag: l
+      previous:
+        type: bool
+        required: false
+        description: If true, print the logs for the previous instance of the container in a pod if it exists. (default print current.)
+        short_flag: p
+      since:
+        type: string
+        required: false
+        description: Only return logs newer than a relative duration like 5s, 2m, or 3h. Defaults to all logs.
+      tail:
+        type: int
+        required: false
+        description: Lines of recent log file to display. Defaults to 20 with no selector, showing all log lines otherwise 10, if a selector is provided.
+      timestamps:
+        type: bool
+        required: false
+        description: Include timestamps on each line in the log output
     rules:
       - must have kubectl:read
   run:
