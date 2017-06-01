@@ -32,9 +32,7 @@ class KubectlBase(Command):
         fh.write(base64.b64decode(self.kubernetes_cert))
 
   def call_json(self, cmd, *args):
-    ## TODO: fix this even uglier hack
-    error_json = '{"kind":"Error","metadata":{"namespace":null,"name":null,"creationTimestamp":null}}'
-    return json.loads(self.call_capture(cmd, '--output=json', *args) or error_json)
+    return json.loads(self.call_capture(cmd, '--output=json', *args))
 
   def call_capture(self, cmd, *args):
     cl = self._commandline(cmd, *args)
@@ -42,8 +40,7 @@ class KubectlBase(Command):
       val = subprocess.check_output(cl)
       return val.decode('utf-8')
     except subprocess.CalledProcessError as e:
-      print(e.output)
-      return None
+      self.fail(e.output)
 
   def _commandline(self, command, *args):
     commandline = [self._kubectl]
