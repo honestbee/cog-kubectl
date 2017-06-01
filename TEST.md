@@ -6,6 +6,9 @@ docker-compose run command sh
 ```
 
 1.  Get pods based on 2 label queries:
+    ```
+    kubectl get po --selector=app=atlas-atlas,chart=address-0.2.0
+    ```
 
     ```bash
     COG_ARGC=1 COG_ARGV_0=po COG_OPTS=selector COG_OPT_SELECTOR_COUNT=2 COG_OPT_SELECTOR_0=app=atlas-atlas COG_OPT_SELECTOR_1=chart=address-0.2.0 python -c "from kubectl.commands.get import Get;c=Get();c.execute()"
